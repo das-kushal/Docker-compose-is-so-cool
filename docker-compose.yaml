@@ -19,7 +19,6 @@ services:
     environment:
       - MONGO_USERNAME=kushal
       - MONGO_PASSWORD=password
-
     depends_on:
       - mongodb # simply specifies that backend wants to connect to mongdb database so mongodb must be up and running before the backend starts
   frontend:
