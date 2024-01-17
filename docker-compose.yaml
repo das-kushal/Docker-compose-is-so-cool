@@ -10,6 +10,7 @@ services:
 
   backend:
     build: ./backend
+    # container_name: goals_backend
     ports:
       - '5001:5001'
     volumes:
