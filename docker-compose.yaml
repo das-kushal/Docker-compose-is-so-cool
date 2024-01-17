@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  mongodb:
+    image: 'mongo'
+    volumes:
+      - data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: kushal
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  backend:
+    build: ./backend
+    ports:
+      - '5001:5001'
+    volumes:
+      - logs:/app/logs # named volume to store the logs 
+      - ./backend:/app # bind mount to reflect the code changes live 
+      - /app/node_modules # anonymous volume so that the node modules is not replaced cause longer path persists here 
+    environment:
+      - MONGO_USERNAME=kushal
+      - MONGO_PASSWORD=password
+
+    depends_on:
+      - mongodb # simply specifies that backend wants to connect to mongdb database so mongodb must be up and running before the backend starts
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/app/src
+      - /app/node_modules
+    ports:
+      - '5173:5173'
+    depends_on:
+      - backend
+
+volumes:
+  # we need to specify named volumes here (bind mounts and anonymous volumes need not be & cant be specified here )
+  data:
+  logs:
+
+
